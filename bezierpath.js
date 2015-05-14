@@ -139,11 +139,7 @@ BezierPath.prototype.toMapBoxFeature = function(properties) {
         return {'geometry': { 'type': 'LineString', 'coordinates': null },
                 'type': 'Feature', 'properties': properties
                };
-    } else if (this.geometries.length == 2) {
-        return {'geometry': { 'type': 'LineString', 'coordinates': [[this.geometries[0].lng,this.geometries[0].lat],[this.geometries[1].lng,this.geometries[1].lat]] },
-                'type': 'Feature', 'properties': properties
-               };
-    } else {
+    }  else {
         var multiline = [];
         for (var i = 0; i < this.geometries.length ; i++) {
             multiline.push([this.geometries[i].lng,this.geometries[i].lat]);
