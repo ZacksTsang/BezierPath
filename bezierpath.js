@@ -88,13 +88,13 @@ BezierPath.prototype.AuxiliaryPoint = function() {
 	var distance = Math.sqrt((this.start.lat-this.end.lat)*(this.start.lat-this.end.lat)+(this.start.lng-this.end.lng)*(this.start.lng-this.end.lng))
 
 	// 中间点到辅助点的距离
-	var adis = (distance/2.0)/Math.tan(this.angle/2.0*PI/180.0);
+	var adis = (distance/2.0)*Math.tan(this.angle*PI/180.0);
 
 	// 辅助点的经纬度
-	var lat = adis*Math.cos((90-btpAngle)*PI/180);
-	var lng = adis*Math.sin((90-btpAngle)*PI/180);
+	var lat = adis*Math.sin((90-btpAngle)*PI/180);
+	var lng = adis*Math.cos((90-btpAngle)*PI/180);
 
-	if (this.start.lng>this.end.lng) {
+	if (this.start.lat>this.end.lat) {
 		this.isClockWise = !this.isClockWise;
 	}
 
@@ -118,13 +118,6 @@ BezierPath.prototype.AuxiliaryPoint = function() {
         target.lng = 360.0 + target.lng;
     }
 
-    if (Math.abs(target.lat-center.lat) < 1) {
-        target.lat += (this.isClockWise?1:-1);
-    };
-    if (Math.abs(target.lng-center.lng) < 1) {
-        target.lng += (this.isClockWise?1:1);
-    };
-
     return target;
 }
 
@@ -139,7 +132,7 @@ BezierPath.prototype.toMapBoxFeature = function(properties) {
         return {'geometry': { 'type': 'LineString', 'coordinates': null },
                 'type': 'Feature', 'properties': properties
                };
-    }  else {
+    } else {
         var multiline = [];
         for (var i = 0; i < this.geometries.length ; i++) {
             multiline.push([this.geometries[i].lng,this.geometries[i].lat]);
