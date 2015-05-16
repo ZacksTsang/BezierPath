@@ -79,7 +79,7 @@ BezierPath.prototype.AuxiliaryPoint = function() {
 	var target = {lat:0,lng:0};
 
 	// 两点之间的角度
-	var btpAngle = Math.atan2(Math.abs(this.start.lat-this.end.lat),Math.abs(this.start.lng-this.end.lng))*180/PI;
+	var btpAngle = Math.atan2(this.start.lat-this.end.lat,this.start.lng-this.end.lng)*180/PI;
 
 	// 中间点
 	var center = {lat:(this.start.lat+this.end.lat)/2,lng:(this.start.lng+this.end.lng)/2};
@@ -91,32 +91,32 @@ BezierPath.prototype.AuxiliaryPoint = function() {
 	var adis = (distance/2.0)*Math.tan(this.angle*PI/180.0);
 
 	// 辅助点的经纬度
-	var lat = adis*Math.sin((90-btpAngle)*PI/180);
-	var lng = adis*Math.cos((90-btpAngle)*PI/180);
+    	var auxAngle = Math.abs(btpAngle) > 90 ? 180 - Math.abs(btpAngle):Math.abs(btpAngle);
+	var lat = adis*Math.sin((90 - auxAngle)*PI/180);
+	var lng = adis*Math.cos((90 - auxAngle)*PI/180);
 
 	if (this.start.lat>this.end.lat) {
 		this.isClockWise = !this.isClockWise;
 	}
-
-	if (this.isClockWise) {
-		target.lat = center.lat + lat;
-		target.lng = center.lng + lng;
+	if (btpAngle >= 90) {
+		target.lat = center.lat + (this.isClockWise?lat:-1*lat);
+		target.lng = center.lng + (this.isClockWise?lng:-1*lng);
 	}else{
-		target.lat = center.lat - lat;
-		target.lng = center.lng - lng;
+	        target.lat = center.lat + (this.isClockWise?lat:-1*lat);
+	        target.lng = center.lng - (this.isClockWise?lng:-1*lng);
 	}
 
 	if (target.lat > 90) {
-        target.lat = 90.0;
-    }else if (target.lat <- 90){
-        target.lat = -90.0;
-    }
-    
-    if (target.lng > 180) {
-        target.lng = target.lng-360.0;
-    }else if (target.lng <- 180){
-        target.lng = 360.0 + target.lng;
-    }
+	        target.lat = 90.0;
+	}else if (target.lat <- 90){
+	        target.lat = -90.0;
+	}
+	    
+	if (target.lng > 180) {
+	        target.lng = target.lng-360.0;
+	}else if (target.lng <- 180){
+	        target.lng = 360.0 + target.lng;
+	}
 
     return target;
 }
