@@ -72,8 +72,8 @@ BezierPath.prototype.MakePath = function(angle) {
 BezierPath.prototype.AuxiliaryPoint = function() {
 	if (this.angle < 0) {
 		this.angle = 0;
-	}else if(this.angle > 180){
-		this.angle = 180;
+	}else if(this.angle > 90){
+		this.angle = 90;
 	}
 
 	var target = {lat:0,lng:0};
